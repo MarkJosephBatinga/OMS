@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JsRuntime
 
 <nav class="sidebar close">
     <header>
@@ -87,3 +88,11 @@
     </div>
 </nav>
 @Body
+
+
+@code {
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync("loadNav");
+    }
+} 
