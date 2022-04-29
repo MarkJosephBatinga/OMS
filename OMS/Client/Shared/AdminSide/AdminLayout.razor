@@ -1,0 +1,89 @@
+﻿@inherits LayoutComponentBase
+
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="./css/images/logo.png" alt="logo">
+            </span>
+
+            <div class="text header-text">
+                <span class="first-line">OJT Management</span>
+                <span class="second-line">System</span>
+            </div>
+        </div>
+
+        <i class='bx bx-chevron-left toggle'></i>
+    </header>
+
+    <div class="menu-bar">
+        <div class="menu">
+            <ul>
+                <li class="search-bar">
+                    <i class='bx bx-search-alt icon'></i>
+                    <input type="search" placeholder="Search">
+                </li>
+            </ul>
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="#">
+                        <i class='bx bx-home icon'></i>
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="../Admin_Side/records.php">
+                        <i class='bx bx-file icon'></i>
+                        <span class="text nav-text">Records</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="../Admin_Side/interns.php">
+                        <i class='bx bx-user icon'></i>
+                        <span class="text nav-text">Interns</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="../Admin_Side/companies.php">
+                        <i class='bx bx-buildings icon'></i>
+                        <span class="text nav-text">Companies</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="../Admin_Side/evaluate.php">
+                        <i class='bx bx-chat icon'></i>
+                        <span class="text nav-text">Evaluate</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bottom-content">
+            <ul>
+                <li class="">
+                    <a href="#">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark Mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+@Body

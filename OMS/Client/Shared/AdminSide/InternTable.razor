@@ -1,0 +1,194 @@
+﻿@inject IJSRuntime JsRuntime
+@inject IInternService InternService
+@inject IToastService Toast
+@inject NavigationManager NavManager
+
+
+<div class="content-container">
+   <div class="text">Interns</div>
+
+
+    <div class="add-button">
+        <button id="add-intern">Add Intern</button>
+    </div>
+
+    <div class="table">
+        <table class="table-content">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email Address</th>
+                    <th>Address</th>
+                    <th>Company</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var intern in AllInterns)
+                {
+                    <tr>
+                        <td>@intern.Id</td>
+                        <td>@intern.Name</td>
+                        <td>@intern.Address</td>
+                        <td>@intern.Email</td>
+                        <td>@intern.Company</td>
+                        <td>
+                            <div class="action-icon">
+                                <a class="btn-edt">
+                                    <i class='bx bx-edit icon-edt' id="edt-record" @onclick="() => GetIntern(intern.Id)"></i>
+                                </a>
+
+                                <a class="btn-del">
+                                    <i class='bx bx-trash icon-del' id="del-record" @onclick="() => GetIntern(intern.Id)"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="bg-modal">
+
+        <div class="alert-chck">
+            <i class='bx bxs-check-circle icon'></i>
+            <span class="msg-head">Success</span>
+            <span class="msg">New data has been saved</span>
+        </div>
+
+
+        <!--- ADD RECORD --->
+        <div class="modal-content">
+
+            <div class="close">
+                <i class='bx bx-x' id="close-add"></i>
+            </div>
+
+            <form>
+
+                <h2>Add New Intern</h2>
+                <EditForm Model="intern" OnValidSubmit="OnAddSubmit">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+                    <ValidationMessage For="() => intern.Name" />
+                    <input type="text" @bind-value="intern.Name" placeholder="Lastname, Firstname MI.">
+                    <ValidationMessage For="() => intern.Email" />
+                    <input type="text" @bind-value="intern.Email" placeholder="E-mail">
+                    <ValidationMessage For="() => intern.Address" />
+                    <input type="text" @bind-value="intern.Address" placeholder="Address">
+                    <ValidationMessage For="() => intern.Company" />
+                    <input type="text" @bind-value="intern.Company" placeholder="Company">
+                    <div class="btn">
+                        <button class="btn-modal" type="submit">SUBMIT</button>
+                    </div>
+                </EditForm>
+            </form>
+
+        </div>
+
+
+        <!--- EDIT RECORD --->
+        <div class="modal-edit">
+
+            <div class="close">
+                <i class='bx bx-x' id="close-edit"></i>
+            </div>
+
+            <form>
+
+                <h2>Edit Intern</h2>
+
+                <EditForm Model="intern" OnValidSubmit="OnEditSubmit">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+                    <ValidationMessage For="() => intern.Name" />
+                    <input type="text" @bind-value="intern.Name" placeholder="Lastname, Firstname MI.">
+                    <ValidationMessage For="() => intern.Email" />
+                    <input type="text" @bind-value="intern.Email" placeholder="E-mail">
+                    <ValidationMessage For="() => intern.Address" />
+                    <input type="text" @bind-value="intern.Address" placeholder="Address">
+                    <ValidationMessage For="() => intern.Company" />
+                    <input type="text" @bind-value="intern.Company" placeholder="Company">
+                    <div class="btn">
+                        <button class="btn-modal" type="submit">Save</button>
+                    </div>
+                </EditForm>
+            </form>
+        </div>
+
+
+        <!--- DELETE RECORD --->
+
+        <div class="modal-delete">
+
+            <div class="del-confirm">
+                <i class='bx bx-error-circle warn-icon'></i>
+                <h3>The record will be deleted permanently!</h3>
+                <span>Are you sure to proceed ?</span>
+
+                <div class="btn">
+                    <button class="btn-con" @onclick="OnDeleteSubmit">Continue</button>
+                    <button class="btn-can" id="btn-can">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {      
+
+    Intern intern = new Intern();
+    List<Intern> AllInterns= new List<Intern>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        AllInterns = await InternService.GetAllIntern();
+    }
+
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync("loadJs");
+    }
+
+    private async Task OnAddSubmit()
+    {
+        var Interns = await InternService.AddIntern(intern);
+        if (Interns != null)
+        {
+            Toast.ShowSuccess("New Intern Successfully Added", "New Intern Added");
+            NavManager.NavigateTo("/admin", true);
+        }
+
+    }
+
+    private async Task OnEditSubmit()
+    {
+        var Interns = await InternService.UpdateIntern(intern);
+        if (Interns != null)
+        {
+            Toast.ShowSuccess("Intern Updated Successfully", "Update Sucessful");
+            intern = new Intern();
+            NavManager.NavigateTo("/admin", true);
+        }
+
+    }
+
+    private async Task OnDeleteSubmit()
+    {
+        var Interns = await InternService.DeleteIntern(intern);
+        if (Interns != null)
+        {
+            Toast.ShowError("Intern Remove Successfully", "Delete Sucessful");
+            intern = new Intern();
+            NavManager.NavigateTo("/admin", true);
+        }
+    }
+
+    private async Task GetIntern(int Id)
+    {
+        intern = await InternService.GetIntern(Id);
+    }
+}
